@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pgtest.mapper.PayMapper">
+	
+	<select id="getPayNumber" resultType="int">
+		SELECT PAY_NUM FROM PAY_INFO WHERE PG_NAME = #{pgProvider} AND PAY_METHOD = #{payMethod}
+	</select>
+</mapper>
+ 

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pgtest.mapper.MerchandiseMapper">
+	
+	<select id="generateMerchandiseNum" resultType="Integer">
+		SELECT MERCHANDISE_SEQ.NEXTVAL FROM DUAL
+	</select>
+	
+	<insert id="insertMerchandiseNumAndId">
+		INSERT INTO MERCHANDISE(MERCHANDISE_NUM,MERCHANT_UID) VALUES(#{merchandiseNum},#{merchandiseId})
+	</insert>
+	
+	<select id="getMerchandiseUid" resultType="String">
+		SELECT MERCHANT_UID FROM MERCHANDISE WHERE MERCHANDISE_NUM = #{key} 
+	</select>
+	
+	<select id="getMerchandisePrice" resultType="Long">
+		SELECT NVL(AMOUNT,0) FROM MERCHANDISE WHERE MERCHANT_UID = #{merchandiseId}
+	</select>
+	
+	<update id="insertMerchandisePrice">
+		UPDATE MERCHANDISE SET AMOUNT = #{merchandisePrice} WHERE MERCHANT_UID = #{merchandiseId}
+	</update>
+	
+	<update id="insertMerchandiseInfo" parameterType="com.pgtest.dto.MerchandiseDTO">
+		UPDATE MERCHANDISE
+		SET IMP_UID = #{imp_uid}, NAME = #{name}, AMOUNT = #{amount}, STATUS = #{status}, PAY = #{pay}, ORDERER = #{orderer} WHERE MERCHANT_UID = #{merchant_uid}
+	</update>
+	
+	<select id="getPaidResults" resultType="com.pgtest.dto.PaidResultDTO">
+		SELECT MERCHANDISE_NUM,IMP_UID,MERCHANT_UID,NAME,AMOUNT,STATUS FROM MERCHANDISE INNER JOIN ORDERER ON MERCHANDISE.ORDERER = ORDERER.ORDERER_NUM WHERE ORDERER_EMAIL = #{email}
+	</select>
+	
+	<select id="getMerchandiseUsingImpUid" resultType="com.pgtest.dto.MerchandiseDTO">
+		SELECT * FROM MERCHANDISE WHERE IMP_UID = #{imp_uid}
+	</select>
+	
+	<select id="getMerchandiseNumUsingImpUid" resultType="int">
+		SELECT MERCHANDISE_NUM FROM MERCHANDISE WHERE IMP_UID = #{imp_uid}
+	</select>
+	
+	<insert id="insertRefundInfo">
+		INSERT INTO REFUND VALUES(REFUND_SEQ.NEXTVAL, #{reason}, #{merchandise_num})
+	</insert>
+	
+	<update id="updateMerchandiseStatus">
+		UPDATE MERCHANDISE SET STATUS = 'cancelled' WHERE MERCHANDISE_NUM = #{merchandiseNum}
+	</update>
+</mapper>
+ 
